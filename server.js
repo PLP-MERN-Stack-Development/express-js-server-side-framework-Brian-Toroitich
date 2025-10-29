@@ -69,3 +69,32 @@ app.listen(PORT, () => {
 
 // Export the app for testing purposes
 module.exports = app; 
+
+// server.js
+const express = require("express");
+const bodyParser = require("body-parser");
+const productRoutes = require("./routes/products");
+const app = express();
+const PORT = 3000;
+
+app.use(bodyParser.json());
+
+// Hello route
+app.get("/", (req, res) => {
+  res.send("Hello World from Express.js!");
+});
+
+// Mount product routes
+app.use("/api/products", productRoutes);
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
+
+const logger = require("./middleware/logger");
+app.use(logger);
+
+const { errorHandler } = require("./middleware/errorHandler");
+
+// Place this after all routes
+app.use(errorHandler);
